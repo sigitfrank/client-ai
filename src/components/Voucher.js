@@ -4,10 +4,17 @@ import Header from './layout/Header';
 import { observer } from 'mobx-react'
 
 function Voucher() {
-  const { getProducts, products, setTransaction, form } = ProductStore
+  const { getProducts, products, setTransaction, form, postTransaction } = ProductStore
   useEffect(() => {
     getProducts()
   }, [])
+
+  const handleTransaction = async () => {
+    const status = await postTransaction()
+    if (!status) return
+    alert('Transaction created')
+  }
+
   return <>
     <Header />
     <div className="container mt-3">
@@ -27,7 +34,7 @@ function Voucher() {
               </select>
             </div>
             <div className="button-wrapper">
-              <button className="btn primary">Process Transaction</button>
+              <button className="btn primary" type="button" onClick={handleTransaction}>Process Transaction</button>
             </div>
           </form>
         </div>
