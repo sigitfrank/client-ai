@@ -10,6 +10,8 @@ class Store {
         name: '',
         price: 0,
     }
+    totalTransaction = 0
+    totalSpent = 0
     constructor() {
         makeAutoObservable(this)
     }
@@ -28,7 +30,6 @@ class Store {
                 price: +this.form.price,
             })
             const { newTransaction } = response.data
-            console.log(newTransaction)
             this.transactions.push(newTransaction)
             return true
         } catch (error) {
@@ -42,10 +43,10 @@ class Store {
         try {
 
             const response = await axios.get(`${TRANSACTION_URL}/${id}`)
-            const { transactions } = response.data
+            const { transactions,totalSpent,totalTransaction } = response.data
             this.transactions = transactions
-            this.form.name = ''
-            this.form.price = 0
+            this.totalSpent = totalSpent
+            this.totalTransaction = totalTransaction
         } catch (error) {
             console.log(error)
         }
@@ -53,5 +54,5 @@ class Store {
 
 }
 
-const ProductStore = new Store()
-export default ProductStore
+const TransactionStore = new Store()
+export default TransactionStore

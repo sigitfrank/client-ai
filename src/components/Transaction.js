@@ -6,7 +6,7 @@ import { observer } from 'mobx-react'
 
 function Transaction() {
   const { getProducts, products, } = ProductStore
-  const { transactions, getTransactions, postTransaction, form, setTransaction } = TransactionStore
+  const { getTransactions, postTransaction, form, setTransaction, } = TransactionStore
   useEffect(() => {
     getProducts()
   }, [getProducts])
@@ -18,6 +18,7 @@ function Transaction() {
   const handleTransaction = async () => {
     const status = await postTransaction()
     if (!status) return
+    getTransactions()
     alert('Transaction created')
   }
 
@@ -26,7 +27,7 @@ function Transaction() {
     <div className="container mt-5 p-3">
       <div className="row justify-content-center mb-5" style={{ minHeight: '10vh', maxHeight: '50vh', overflow: 'auto' }}>
         <div className="col-lg-6">
-          <Transactions transactions={transactions} />
+          <Transactions />
         </div>
       </div>
       <h4 className='text-center mb-4'>Make Transaction for: {form.name} - {form.price}</h4>
@@ -62,10 +63,9 @@ export default observer(Transaction)
 
 
 
-const Transactions = observer(({ transactions }) => {
-  const getTotal = () => transactions.map(transaction => +transaction.total_spent).reduce((accumulator, item) => {
-    return accumulator + item
-  }, 0)
+const Transactions = observer(() => {
+  const { transactions, totalSpent, totalTransaction } = TransactionStore
+
   return <div> <table className="table">
     <thead>
       <tr>
@@ -88,8 +88,8 @@ const Transactions = observer(({ transactions }) => {
       }
     </tbody>
   </table>
-    <p>Total Spent: ${getTotal()}.00</p>
-    <p>Total Transaction: {transactions.length}</p>
+    <p>Total Spent: ${totalSpent}.00</p>
+    <p>Total Transaction: ${totalTransaction}</p>
   </div>
 })
 
