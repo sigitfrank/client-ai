@@ -18,6 +18,10 @@ code {
   margin-top: 1rem;
 }
 
+button {
+  transition: .25s;
+}
+
 button.primary {
   color: #FFF;
   background: #1E2A5A;
@@ -26,4 +30,17 @@ button.primary {
 button.secondary {
   color: #FFF;
   background: #329676;
+}
+
+
+button:hover {
+  color: #FFF !important;
+}
+
+button.primary:hover {
+  background: #0a195788;
+}
+
+button.secondary:hover {
+  background: #2a977480;
 }

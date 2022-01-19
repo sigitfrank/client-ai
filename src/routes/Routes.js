@@ -21,7 +21,7 @@ function RoutesApp() {
             <Route
                 path="/form"
                 element={
-                    <PrivateRoute PrivateRoute redirectTo="/" >
+                    <PrivateRoute redirectTo="/" >
                         <Form />
                     </PrivateRoute >
                 }
