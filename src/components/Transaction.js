@@ -4,15 +4,15 @@ import TransactionStore from '../store/transactionStore'
 import Header from './layout/Header'
 import { observer } from 'mobx-react'
 
-function Voucher() {
+function Transaction() {
   const { getProducts, products, } = ProductStore
   const { transactions, getTransactions, postTransaction, form, setTransaction } = TransactionStore
   useEffect(() => {
     getProducts()
-  }, [])
+  }, [getProducts])
   useEffect(() => {
     getTransactions()
-  }, [])
+  }, [getTransactions])
 
 
   const handleTransaction = async () => {
@@ -58,11 +58,15 @@ function Voucher() {
   </>
 }
 
-export default observer(Voucher)
+export default observer(Transaction)
+
 
 
 const Transactions = observer(({ transactions }) => {
-  return <table className="table">
+  const getTotal = () => transactions.map(transaction => +transaction.total_spent).reduce((accumulator, item) => {
+    return accumulator + item
+  }, 0)
+  return <div> <table className="table">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -82,8 +86,10 @@ const Transactions = observer(({ transactions }) => {
           </tr>
         })
       }
-
     </tbody>
   </table>
+    <p>Total Spent: ${getTotal()}.00</p>
+    <p>Total Transaction: {transactions.length}</p>
+  </div>
 })
 

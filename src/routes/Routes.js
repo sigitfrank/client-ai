@@ -1,9 +1,9 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Home from '../components/Home'
-import Voucher from '../components/Voucher'
 import Form from '../components/Form'
 import PrivateRoute from './PrivateRoute'
+import Transaction from '../components/Transaction'
 
 function RoutesApp() {
 
@@ -14,7 +14,7 @@ function RoutesApp() {
                 path="/voucher"
                 element={
                     <PrivateRoute redirectTo="/">
-                        <Voucher />
+                        <Transaction />
                     </PrivateRoute>
                 }
             />
