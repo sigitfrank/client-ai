@@ -11,6 +11,7 @@ const loginValidation = (payload)=>{
         alert('Email format is not valid')
         return false
     }
+    return true
 }
 
 export default loginValidation

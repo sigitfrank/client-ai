@@ -1,7 +1,10 @@
 import React from 'react';
+import Header from './layout/Header';
 
 function Voucher() {
-  return <div></div>;
+  return <>
+    <Header />
+  </>;
 }
 
 export default Voucher;
