@@ -1,13 +1,19 @@
-import React, { useEffect } from 'react';
-import ProductStore from '../store/productStore';
-import Header from './layout/Header';
+import React, { useEffect } from 'react'
+import ProductStore from '../store/productStore'
+import TransactionStore from '../store/transactionStore'
+import Header from './layout/Header'
 import { observer } from 'mobx-react'
 
 function Voucher() {
-  const { getProducts, products, setTransaction, form, postTransaction } = ProductStore
+  const { getProducts, products, } = ProductStore
+  const { transactions, getTransactions, postTransaction, form, setTransaction } = TransactionStore
   useEffect(() => {
     getProducts()
   }, [])
+  useEffect(() => {
+    getTransactions()
+  }, [])
+
 
   const handleTransaction = async () => {
     const status = await postTransaction()
@@ -17,8 +23,14 @@ function Voucher() {
 
   return <>
     <Header />
-    <div className="container mt-3">
-      <h4 className='text-center'>Make Transaction for: {form.name} - {form.price}</h4>
+    <div className="container mt-5 p-3">
+      <div className="row justify-content-center mb-5" style={{ minHeight: '10vh', maxHeight: '50vh', overflow: 'auto' }}>
+        <div className="col-lg-6">
+          <Transactions transactions={transactions} />
+        </div>
+      </div>
+      <h4 className='text-center mb-4'>Make Transaction for: {form.name} - {form.price}</h4>
+
       <div className="row justify-content-center">
         <div className="col-lg-6">
           <form>
@@ -40,7 +52,35 @@ function Voucher() {
         </div>
       </div>
     </div>
-  </>;
+  </>
 }
 
-export default observer(Voucher);
+export default observer(Voucher)
+
+
+const Transactions = observer(({ transactions }) => {
+  return <table className="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Total Spent</th>
+        <th scope="col">Total Saving</th>
+        <th scope="col">Transaction Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        transactions && transactions.map((transaction, index) => {
+          return <tr className='text-center' key={transaction.id}>
+            <th scope="row">{index + 1}</th>
+            <td>{transaction.total_spent}</td>
+            <td>{transaction.total_saving}</td>
+            <td>{transaction.transaction_at.split('T')[0]}</td>
+          </tr>
+        })
+      }
+
+    </tbody>
+  </table>
+})
+

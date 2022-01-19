@@ -1,11 +1,11 @@
 const createTransactionValidation = (payload)=>{
     const  {name, price} = payload
     if (!name) {
-        alert('Email cannot be empty')
+        alert('Choose product first')
         return false
     }
     if (!price) {
-        alert('Email format is not valid')
+        alert('Choose product first')
         return false
     }
     return true
