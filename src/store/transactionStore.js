@@ -7,7 +7,6 @@ import createTransactionValidation from '../validations/transaction/createTransa
 class Store {
     transactions = []
     form = {
-        id: '',
         name: '',
         price: 0,
     }
@@ -29,6 +28,7 @@ class Store {
                 price: +this.form.price,
             })
             const { newTransaction } = response.data
+            console.log(newTransaction)
             this.transactions.push(newTransaction)
             return true
         } catch (error) {
@@ -44,6 +44,8 @@ class Store {
             const response = await axios.get(`${TRANSACTION_URL}/${id}`)
             const { transactions } = response.data
             this.transactions = transactions
+            this.form.name = ''
+            this.form.price = 0
         } catch (error) {
             console.log(error)
         }

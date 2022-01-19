@@ -36,11 +36,14 @@ function Voucher() {
           <form>
             <div className="form-group">
               <label htmlFor="product">Product</label>
-              <select name="product" className='form-select' id="product" defaultValue="" onChange={(e) => setTransaction(e.target.value)}>
+              <select name="product" className='form-select' id="product" defaultValue={JSON.stringify(form)} onChange={(e) => setTransaction(e.target.value)}>
                 <option value="">Select Product</option>
                 {
                   products && products.map(product => {
-                    return <option key={product.id} value={JSON.stringify(product)}>{product.name} - ${product.price}</option>
+                    return <option key={product.id} value={JSON.stringify({
+                      name: product.name,
+                      price: product.price,
+                    })}>{product.name} - ${product.price}</option>
                   })
                 }
               </select>
