@@ -68,6 +68,8 @@ const ImageWrapper = observer(() => {
   const handleClaimVoucher = async () => {
     const status = await postClaimVoucher()
     if (!status) return
+    getCustomerVoucher()
+    checkVoucher()
     alert('Voucher claimed!')
   }
 
@@ -76,10 +78,7 @@ const ImageWrapper = observer(() => {
       <button className="btn primary" onClick={handleClaimVoucher}>Claim your voucher</button>
     </div>
     if (!voucherStatus && !voucherData?.customer_id) return <p className='fw-bold mt-5'>Please wait until {formatToLocalDateTime(nextVoucherTime)}  </p>
-    if (voucherData?.customer_id) {
-      console.log('ads')
-      return <p className='fw-bold mt-5'>You already claimed the voucher</p>
-    }
+    if (voucherData?.customer_id) return <p className='fw-bold mt-5'>You already claimed the voucher</p>
     if (!voucherData?.customer_id) return <div className="button-wrapper">
       <button className="btn primary" onClick={handleClaimVoucher}>Claim your voucher</button>
     </div>
