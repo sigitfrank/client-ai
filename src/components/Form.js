@@ -8,8 +8,11 @@ function Form() {
   const navigate = useNavigate()
   const { postUploadImage, setFile } = CustomerStore
 
-  const handleUpload = () => {
-    alert('asd')
+  const handleUpload = async () => {
+    const status = await postUploadImage()
+    if (!status) return
+    alert('Image uploaded and valid!')
+    navigate('/transaction')
   }
 
   return <>
@@ -21,7 +24,7 @@ function Form() {
           <form action="">
             <div className="form-group">
               <label htmlFor="image">Upload Image</label>
-              <input type="file" name="image" id="image" onChange={(e) => setFile(e.target.value)} className='form-control mt-3' />
+              <input type="file" name="image" id="image" onChange={(e) => setFile(e.target.files[0])} className='form-control mt-3' />
             </div>
             <div className="button-wrapper">
               <button className="btn primary me-2" type='button' onClick={() => handleUpload()}>Upload</button>
