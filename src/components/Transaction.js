@@ -88,6 +88,7 @@ const Transactions = observer(() => {
       }
     </tbody>
   </table>
+    <p className='fw-bold mb-0'>Last 30 Days:</p>
     <p>Total Spent: ${totalSpent}.00</p>
     <p>Total Transaction: ${totalTransaction}</p>
   </div>

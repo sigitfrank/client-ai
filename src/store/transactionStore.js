@@ -43,10 +43,10 @@ class Store {
         try {
 
             const response = await axios.get(`${TRANSACTION_URL}/${id}`)
-            const { transactions,totalSpent,totalTransaction } = response.data
+            const { transactions, last30DaysSpentTransactions, last30DaysTransactions} = response.data
             this.transactions = transactions
-            this.totalSpent = totalSpent
-            this.totalTransaction = totalTransaction
+            this.totalSpent = last30DaysSpentTransactions
+            this.totalTransaction = last30DaysTransactions
         } catch (error) {
             console.log(error)
         }
