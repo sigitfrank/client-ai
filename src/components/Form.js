@@ -1,9 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import CustomerStore from '../store/customerStore';
 import Header from './layout/Header';
+import { observer } from 'mobx-react'
 
 function Form() {
   const navigate = useNavigate()
+  const { postUploadImage, setFile } = CustomerStore
 
   const handleUpload = () => {
     alert('asd')
@@ -18,7 +21,7 @@ function Form() {
           <form action="">
             <div className="form-group">
               <label htmlFor="image">Upload Image</label>
-              <input type="file" name="image" id="image" className='form-control mt-3' />
+              <input type="file" name="image" id="image" onChange={(e) => setFile(e.target.value)} className='form-control mt-3' />
             </div>
             <div className="button-wrapper">
               <button className="btn primary me-2" type='button' onClick={() => handleUpload()}>Upload</button>
@@ -31,4 +34,4 @@ function Form() {
   </>;
 }
 
-export default Form;
+export default observer(Form);
