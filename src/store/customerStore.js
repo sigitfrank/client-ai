@@ -7,8 +7,9 @@ class Store {
     imageData = null
     voucherData = null
     file = null
+    voucherStatus = false
     lastClaimed = null
-    voucherStatus = 0
+    nextVoucherTime = new Date()
     constructor() {
         makeAutoObservable(this)
     }
@@ -83,9 +84,10 @@ class Store {
     checkVoucher = async () => {
         try {
             const response = await axios.get(`${CUSTOMER_URL}/voucher/check/status`)
-            const { status, last_claimed } = response.data
-            this.lastClaimed = last_claimed
+            const { status, next_voucher_time, last_claimed } = response.data
             this.voucherStatus = status
+            this.nextVoucherTime = next_voucher_time
+            this.lastClaimed = last_claimed
             return true
         } catch (error) {
             console.log(error)

@@ -4,7 +4,7 @@ import CustomerStore from '../store/customerStore';
 import Header from './layout/Header';
 import { observer } from 'mobx-react'
 import TransactionStore from '../store/transactionStore';
-import moment from 'moment'
+import formatToLocalDateTime from '../helpers/formatToLocalDateTime';
 
 function Form() {
   const navigate = useNavigate()
@@ -56,7 +56,7 @@ function Form() {
 export default observer(Form);
 
 const ImageWrapper = observer(() => {
-  const { postClaimVoucher, getCustomerVoucher, voucherData, checkVoucher, voucherStatus, lastClaimed } = CustomerStore
+  const { postClaimVoucher, getCustomerVoucher, voucherData, checkVoucher, voucherStatus, nextVoucherTime, lastClaimed } = CustomerStore
   useEffect(() => {
     getCustomerVoucher()
   }, [getCustomerVoucher])
@@ -71,19 +71,20 @@ const ImageWrapper = observer(() => {
     alert('Voucher claimed!')
   }
 
-  const claimable = () => {
-    if (!lastClaimed) return false
-    const newLastClaimedTime = moment(lastClaimed).add(10, 'minutes')
-    return moment(newLastClaimedTime).isBefore(moment())
-  }
   const renderAction = () => {
-    if (voucherData?.customer_id) return <p className='fw-bold mt-5'>You already claimed the voucher</p>
-    if (!claimable()) return <p className='fw-bold mt-5'>Please wait until {moment(lastClaimed).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss')}  </p>
+    if (!lastClaimed) return <div className="button-wrapper">
+      <button className="btn primary" onClick={handleClaimVoucher}>Claim your voucher</button>
+    </div>
+    if (!voucherStatus && !voucherData?.customer_id) return <p className='fw-bold mt-5'>Please wait until {formatToLocalDateTime(nextVoucherTime)}  </p>
+    if (voucherData?.customer_id) {
+      console.log('ads')
+      return <p className='fw-bold mt-5'>You already claimed the voucher</p>
+    }
     if (!voucherData?.customer_id) return <div className="button-wrapper">
       <button className="btn primary" onClick={handleClaimVoucher}>Claim your voucher</button>
     </div>
-
   }
+
   return <div className='text-center mb-5'>
     <p className='fw-bold'>Your image is verified</p>
     <img src="https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80" alt="customer-img" style={{
