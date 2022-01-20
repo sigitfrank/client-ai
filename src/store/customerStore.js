@@ -16,13 +16,13 @@ class Store {
     setFile = (file) => this.file = file
     postUploadImage = async () => {
         const userAccessToken = localStorage.getItem('userAccessToken')
-        const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
-        if (!this.file) return false
-        const formData = new FormData()
-        formData.append("id", id)
-        formData.append("image", this.file)
         try {
-            const response = await axios.post(CUSTOMER_URL, formData, {
+            const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
+            if (!this.file) return false
+            const formData = new FormData()
+            formData.append("id", id)
+            formData.append("image", this.file)
+            await axios.post(CUSTOMER_URL, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     Authorization: `Bearer ${userAccessToken}`
@@ -38,9 +38,13 @@ class Store {
 
     getCustomerImage = async () => {
         const userAccessToken = localStorage.getItem('userAccessToken')
-        const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
         try {
-            const response = await axios.get(`${CUSTOMER_URL}/${id}`)
+            const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
+            const response = await axios.get(`${CUSTOMER_URL}/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${userAccessToken}`
+                }
+            })
             const { image } = response.data
             this.imageData = image
             return true
@@ -52,10 +56,14 @@ class Store {
 
     postClaimVoucher = async () => {
         const userAccessToken = localStorage.getItem('userAccessToken')
-        const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
         try {
+            const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
             const response = await axios.post(`${CUSTOMER_URL}/voucher`, {
                 customer_id: id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${userAccessToken}`
+                }
             })
             const { newVoucher } = response.data
             this.voucherData = newVoucher
@@ -69,9 +77,13 @@ class Store {
 
     getCustomerVoucher = async () => {
         const userAccessToken = localStorage.getItem('userAccessToken')
-        const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
         try {
-            const response = await axios.get(`${CUSTOMER_URL}/voucher/${id}`)
+            const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
+            const response = await axios.get(`${CUSTOMER_URL}/voucher/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${userAccessToken}`
+                }
+            })
             const { voucher } = response.data
             this.voucherData = voucher
             return true
@@ -82,8 +94,13 @@ class Store {
     }
 
     checkVoucher = async () => {
+        const userAccessToken = localStorage.getItem('userAccessToken')
         try {
-            const response = await axios.get(`${CUSTOMER_URL}/voucher/check/status`)
+            const response = await axios.get(`${CUSTOMER_URL}/voucher/check/status`, {
+                headers: {
+                    Authorization: `Bearer ${userAccessToken}`
+                }
+            })
             const { status, next_voucher_time, last_claimed } = response.data
             this.voucherStatus = status
             this.nextVoucherTime = next_voucher_time

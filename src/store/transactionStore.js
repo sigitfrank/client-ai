@@ -24,14 +24,18 @@ class Store {
         this.form = JSON.parse(value)
     }
     postTransaction = async () => {
-        const accessToken = localStorage.getItem('userAccessToken')
-        const { id } = accessToken ? jwt_decode(accessToken) : ''
-        const isValid = createTransactionValidation(this.form)
-        if (!isValid) return false
+        const userAccessToken = localStorage.getItem('userAccessToken')
         try {
+            const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
+            const isValid = createTransactionValidation(this.form)
+            if (!isValid) return false
             const response = await axios.post(TRANSACTION_URL, {
                 id,
                 price: +this.form.price,
+            },{
+                headers: {
+                    Authorization: `Bearer ${userAccessToken}`
+                }
             })
             const { newTransaction } = response.data
             this.transactions.push(newTransaction)
@@ -42,11 +46,14 @@ class Store {
         }
     }
     getTransactions = async () => {
-        const accessToken = localStorage.getItem('userAccessToken')
-        const { id } = accessToken ? jwt_decode(accessToken) : ''
+        const userAccessToken = localStorage.getItem('userAccessToken')
         try {
-
-            const response = await axios.get(`${TRANSACTION_URL}/${id}`)
+            const { id } = userAccessToken ? jwt_decode(userAccessToken) : ''
+            const response = await axios.get(`${TRANSACTION_URL}/${id}`,{
+                headers: {
+                    Authorization: `Bearer ${userAccessToken}`
+                }
+            })
             const { transactions, last30DaysSpentTransactions, last30DaysTransactions} = response.data
             this.transactions = transactions
             this.totalSpent = last30DaysSpentTransactions

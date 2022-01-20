@@ -8,8 +8,13 @@ class Store {
         makeAutoObservable(this)
     }
     getProducts = async () => {
+        const userAccessToken = localStorage.getItem('userAccessToken')
         try {
-            const response = await axios.get(PRODUCT_URL)
+            const response = await axios.get(PRODUCT_URL, {
+                headers: {
+                    Authorization: `Bearer ${userAccessToken}`
+                }
+            })
             const { products } = response.data
             this.products = products
         } catch (error) {
