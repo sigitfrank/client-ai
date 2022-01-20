@@ -17,6 +17,10 @@ class Store {
     }
 
     setTransaction = (value) => {
+        if(!value) return this.form = {
+            name: '',
+            price: 0,
+        }
         this.form = JSON.parse(value)
     }
     postTransaction = async () => {

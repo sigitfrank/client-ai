@@ -25,12 +25,12 @@ function Transaction() {
   return <>
     <Header />
     <div className="container mt-5 p-3">
-      <div className="row justify-content-center mb-5" style={{ minHeight: '10vh', maxHeight: '50vh', overflow: 'auto' }}>
+      <div className="row justify-content-center mb-5" style={{ minHeight: '10vh', maxHeight: '40vh', overflow: 'auto' }}>
         <div className="col-lg-6">
           <Transactions />
         </div>
       </div>
-      <h4 className='text-center mb-4'>Make Transaction for: {form.name} - {form.price}</h4>
+      <h4 className='text-center mb-4'>Make Transaction for: {form.name} - ${form.price}</h4>
 
       <div className="row justify-content-center">
         <div className="col-lg-6">
@@ -90,7 +90,7 @@ const Transactions = observer(() => {
   </table>
     <p className='fw-bold mb-0'>Last 30 Days:</p>
     <p>Total Spent: ${totalSpent}.00</p>
-    <p>Total Transaction: ${totalTransaction}</p>
+    <p>Total Transaction: {totalTransaction}</p>
   </div>
 })
 
