@@ -7,6 +7,8 @@ class Store {
     imageData = null
     voucherData = null
     file = null
+    lastClaimed = null
+    voucherStatus = 0
     constructor() {
         makeAutoObservable(this)
     }
@@ -25,6 +27,7 @@ class Store {
                     Authorization: `Bearer ${userAccessToken}`
                 }
             })
+            this.getCustomerImage()
             return true
         } catch (error) {
             console.log(error)
@@ -70,6 +73,19 @@ class Store {
             const response = await axios.get(`${CUSTOMER_URL}/voucher/${id}`)
             const { voucher } = response.data
             this.voucherData = voucher
+            return true
+        } catch (error) {
+            console.log(error)
+            return false
+        }
+    }
+
+    checkVoucher = async () => {
+        try {
+            const response = await axios.get(`${CUSTOMER_URL}/voucher/check/status`)
+            const { status, last_claimed } = response.data
+            this.lastClaimed = last_claimed
+            this.voucherStatus = status
             return true
         } catch (error) {
             console.log(error)

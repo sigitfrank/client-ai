@@ -3,11 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import CustomerStore from '../store/customerStore';
 import Header from './layout/Header';
 import { observer } from 'mobx-react'
+import TransactionStore from '../store/transactionStore';
+import moment from 'moment'
 
 function Form() {
   const navigate = useNavigate()
   const { postUploadImage, setFile, getCustomerImage, imageData } = CustomerStore
+  const { totalSpent, totalTransaction } = TransactionStore
+
   useEffect(() => {
+    if (totalSpent < 100 || totalTransaction < 3) {
+      return navigate('/transaction')
+    }
     getCustomerImage()
   }, [getCustomerImage])
 
@@ -15,7 +22,6 @@ function Form() {
     const status = await postUploadImage()
     if (!status) return
     alert('Image uploaded and valid!')
-    navigate('/transaction')
   }
 
   const renderContent = () => {
@@ -50,16 +56,33 @@ function Form() {
 export default observer(Form);
 
 const ImageWrapper = observer(() => {
-  const { postClaimVoucher, getCustomerVoucher, voucherData } = CustomerStore
-
+  const { postClaimVoucher, getCustomerVoucher, voucherData, checkVoucher, voucherStatus, lastClaimed } = CustomerStore
   useEffect(() => {
     getCustomerVoucher()
   }, [getCustomerVoucher])
+
+  useEffect(() => {
+    checkVoucher()
+  }, [checkVoucher])
 
   const handleClaimVoucher = async () => {
     const status = await postClaimVoucher()
     if (!status) return
     alert('Voucher claimed!')
+  }
+
+  const claimable = () => {
+    if (!lastClaimed) return false
+    const newLastClaimedTime = moment(lastClaimed).add(10, 'minutes')
+    return moment(newLastClaimedTime).isBefore(moment())
+  }
+  const renderAction = () => {
+    if (voucherData?.customer_id) return <p className='fw-bold mt-5'>You already claimed the voucher</p>
+    if (!claimable()) return <p className='fw-bold mt-5'>Please wait until {moment(lastClaimed).add(10, 'minutes').format('YYYY-MM-DD HH:mm:ss')}  </p>
+    if (!voucherData?.customer_id) return <div className="button-wrapper">
+      <button className="btn primary" onClick={handleClaimVoucher}>Claim your voucher</button>
+    </div>
+
   }
   return <div className='text-center mb-5'>
     <p className='fw-bold'>Your image is verified</p>
@@ -68,11 +91,8 @@ const ImageWrapper = observer(() => {
       objectFit: 'cover',
       width: '200px'
     }} />
-    {
-      !voucherData?.customer_id ? <div className="button-wrapper">
-        <button className="btn primary" onClick={handleClaimVoucher}>Claim your voucher</button>
-      </div> : <p className='fw-bold mt-5'>You already claimed the voucher</p>
-    }
+    {!voucherData?.customer_id && <p className='mt-5'>You don't claim your voucher yet</p>}
+    {renderAction()}
   </div>
 })
 

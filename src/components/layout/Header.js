@@ -1,12 +1,19 @@
+import React, {useEffect} from 'react';
 import jwtDecode from 'jwt-decode';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppStore from '../../store/store';
+import TransactionStore from '../../store/transactionStore';
 
 function Header() {
     const navigate = useNavigate()
     const userAccessToken = localStorage.getItem('userAccessToken')
     const {first_name} = jwtDecode(userAccessToken)
+  const { getTransactions } = TransactionStore
+
+
+    useEffect(() => {
+        getTransactions()
+      }, [getTransactions])
 
     const { postLogout } = AppStore
 

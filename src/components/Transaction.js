@@ -14,9 +14,7 @@ function Transaction() {
   useEffect(() => {
     getProducts()
   }, [getProducts])
-  useEffect(() => {
-    getTransactions()
-  }, [getTransactions])
+
 
 
   const handleTransaction = async () => {
