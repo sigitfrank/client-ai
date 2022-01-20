@@ -11,7 +11,7 @@ function RoutesApp() {
         <Routes>
             <Route path="/" element={<Home />} />
             <Route
-                path="/voucher"
+                path="/transaction"
                 element={
                     <PrivateRoute redirectTo="/">
                         <Transaction />

@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductStore from '../store/productStore'
 import TransactionStore from '../store/transactionStore'
 import Header from './layout/Header'
 import { observer } from 'mobx-react'
+import { useNavigate } from 'react-router-dom'
 
 function Transaction() {
   const { getProducts, products, } = ProductStore
-  const { getTransactions, postTransaction, form, setTransaction, } = TransactionStore
+  const [disable, setDisable] = useState(false)
+  const [time, setTime] = useState(5)
+  const navigate = useNavigate()
+  const { getTransactions, postTransaction, form, setTransaction, totalSpent, totalTransaction } = TransactionStore
   useEffect(() => {
     getProducts()
   }, [getProducts])
@@ -18,8 +22,25 @@ function Transaction() {
   const handleTransaction = async () => {
     const status = await postTransaction()
     if (!status) return
+    setDisable(true)
+    setTime(5)
     getTransactions()
     alert('Transaction created')
+    setTimeout(() => {
+      setDisable(false)
+    }, 5000)
+
+    const refreshIntervalId = setInterval(() => {
+      if (time < 0) return clearInterval(refreshIntervalId)
+      setTime(prev => prev - 1)
+    }, 1000)
+
+  }
+
+  const checkLink = () => {
+    if (totalSpent >= 100 && totalTransaction >= 3) return <h3 className='my-5 text-center fw-bold'>
+      <span onClick={() => navigate('/form')} style={{ borderBottom: '1px solid #DDD', paddingBottom: '.5rem', cursor: 'pointer' }}>Get your voucher here!</span>
+    </h3>
   }
 
   return <>
@@ -30,8 +51,9 @@ function Transaction() {
           <Transactions />
         </div>
       </div>
-      <h4 className='text-center mb-4'>Make Transaction for: {form.name} - ${form.price}</h4>
 
+      {checkLink()}
+      <h4 className='text-center mb-4'>Make Transaction for: {form.name} - ${form.price}</h4>
       <div className="row justify-content-center">
         <div className="col-lg-6">
           <form>
@@ -49,9 +71,11 @@ function Transaction() {
                 }
               </select>
             </div>
-            <div className="button-wrapper">
-              <button className="btn primary" type="button" onClick={handleTransaction}>Process Transaction</button>
-            </div>
+            {
+              !disable ? <div className="button-wrapper">
+                <button className="btn primary" type="button" onClick={handleTransaction}>Process Transaction</button>
+              </div> : <p className='mt-3'>Please Wait... {time} seconds</p>
+            }
           </form>
         </div>
       </div>

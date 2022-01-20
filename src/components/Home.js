@@ -12,7 +12,7 @@ function Home() {
     const isLoggedIn = await postLogin()
     if(!isLoggedIn) return
     alert('Login')
-    navigate('/voucher')
+    navigate('/transaction')
   }
   
   return <div className='home'>
