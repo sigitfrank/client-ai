@@ -53,6 +53,8 @@ class Store {
             const response = await axios.post(`${CUSTOMER_URL}/voucher`, {
                 customer_id: id
             })
+            const { newVoucher } = response.data
+            this.voucherData = newVoucher
             return true
         } catch (error) {
             console.log(error)

@@ -16,7 +16,7 @@ function Header() {
     }
     return <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
-            <span className="navbar-brand">ABC Company</span>
+            <span className="navbar-brand" style={{cursor:'pointer'}} onClick={()=>navigate('/transaction')}>ABC Company</span>
             <span >Hi, {first_name}</span>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
