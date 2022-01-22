@@ -74,6 +74,7 @@ const ImageWrapper = observer(() => {
   }
 
   const renderAction = () => {
+    if (voucherStatus === 'not-available') return <p className='fw-bold mt-5'> Voucher is not available anymore </p>
     if (!lastClaimed) return <div className="button-wrapper">
       <button className="btn primary" onClick={handleClaimVoucher}>Claim your voucher</button>
     </div>

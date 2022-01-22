@@ -107,7 +107,7 @@ class Store {
             this.lastClaimed = last_claimed
             return true
         } catch (error) {
-            console.log(error)
+            this.voucherStatus = 'not-available'
             return false
         }
     }
