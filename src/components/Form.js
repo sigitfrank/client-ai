@@ -5,6 +5,7 @@ import Header from './layout/Header';
 import { observer } from 'mobx-react'
 import TransactionStore from '../store/transactionStore';
 import formatToLocalDateTime from '../helpers/formatToLocalDateTime';
+import { BASE_URL } from '../api/api';
 
 function Form() {
   const navigate = useNavigate()
@@ -56,7 +57,7 @@ function Form() {
 export default observer(Form);
 
 const ImageWrapper = observer(() => {
-  const { postClaimVoucher, getCustomerVoucher, voucherData, checkVoucher, voucherStatus, nextVoucherTime, lastClaimed } = CustomerStore
+  const { imageData, postClaimVoucher, getCustomerVoucher, voucherData, checkVoucher, voucherStatus, nextVoucherTime, lastClaimed } = CustomerStore
   useEffect(() => {
     getCustomerVoucher()
   }, [getCustomerVoucher])
@@ -87,7 +88,7 @@ const ImageWrapper = observer(() => {
 
   return <div className='text-center mb-5'>
     <p className='fw-bold'>Your image is verified</p>
-    <img src="https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80" alt="customer-img" style={{
+    <img src={`${BASE_URL}${imageData.picture}`} alt="customer-img" style={{
       borderRadius: '.5rem',
       objectFit: 'cover',
       width: '200px'
